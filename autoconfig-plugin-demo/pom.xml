@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>autoconfig.maven.plugin.my.demo</groupId>
+    <artifactId>autoconfig-plugin-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Autoconfig Demo</name>
+    <!-- packaging默认是jar包,可以不写 -->
+    <!-- 打war包时,发现autoconfig不起作用 -->
+    <!--<packaging>jar</packaging>-->
+
+    <build>
+        <plugins>
+            <!-- ================================================= -->
+            <!-- autoconfig 插件 -->
+            <!-- ================================================= -->
+            <plugin>
+                <groupId>com.alibaba.citrus.tool</groupId>
+                <artifactId>autoconfig-maven-plugin</artifactId>
+                <version>1.2</version>
+                <!--<configuration>-->
+                <!-- 自定义antx.property的文件位置,多环境中指定参数来修改配置 -->
+                <!-- ${user.dir}表示windows下的用户目录,${user.home}表示linux和Mac的用户目录 -->
+                <!-- 或者不配置userProperties 执行命令行指定 mvn clean install -Dmaven.test.skip=true -Dautoconfig.userProperties=antx.properties -DuserProp=antx.properties -->
+                <!-- 这里如果不指定,默认的antx.properties是在项目的根目录下 -->
+                <!--<userProperties>${user.home}/${autoconfig.properties}</userProperties>-->
+                <!--</configuration>-->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>autoconfig</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 在实际的编译过程中只需要 mvn package -P dev或者 mavn package -P pro就可以打包生产或者开发下的包了 -->
+    <!-- 或者不配置profiles 执行命令行指定 mvn clean install -Dmaven.test.skip=true -Dautoconfig.userProperties=antx.properties -DuserProp=antx.properties -->
+    <!-- 指定profiles的好处就是,配置文件可以不存放在项目中,每个人都可以下载代码,但是线上环境等配置项不是每个人都知道的 -->
+    <!-- 本案例只是个demo,所以配置项就放在项目中了-->
+    <!--<profiles>-->
+        <!--<profile>-->
+            <!--<id>dev</id>-->
+            <!--<properties>-->
+                <!--&lt;!&ndash; autoconfig.properties表示声明变量,可以在整个pom文件中替换placeholder &ndash;&gt;-->
+                <!--<autoconfig.properties>antx-dev.properties</autoconfig.properties>-->
+            <!--</properties>-->
+        <!--</profile>-->
+        <!--<profile>-->
+            <!--<id>deploy</id>-->
+            <!--<properties>-->
+                <!--<autoconfig.properties>antx-pro.properties</autoconfig.properties>-->
+            <!--</properties>-->
+        <!--</profile>-->
+    <!--</profiles>-->
+
+</project>
